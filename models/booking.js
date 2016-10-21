@@ -24,7 +24,7 @@ function Booking() {
 
   this.confirmBooking = function(payload, res) {
     connection.acquire(function(err, con) {
-      con.query('update dat_ve set TrangThai = 1 where Ma = ?', id, function(err, result) {
+      con.query('update dat_ve set TrangThai = 1 where Ma = ?', payload.Ma, function(err, result) {
         con.release();
         if (err) {
           res.send({status: 1, message: 'Record update failed'});
@@ -37,7 +37,7 @@ function Booking() {
 
   this.cancelBooking = function(payload, res) {
     connection.acquire(function(err, con) {
-      con.query('delete from dat_ve where id = ?', id, function(err, result) {
+      con.query('delete from dat_ve where Ma = ?', payload.Ma, function(err, result) {
         con.release();
         if (err) {
           res.send({status: 1, message: 'Failed to delete'});
