@@ -9,7 +9,7 @@ router.post('/', function(req, res) {
 	flights.addFlight(req.body, res);
 })
 router.get('/search', function(req, res) {
-  flights.searchFlights(res);
+  flights.searchFlights(req.query,res);
 });
 
 module.exports = router;
