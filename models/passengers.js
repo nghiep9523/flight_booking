@@ -18,11 +18,9 @@ function Passengers() {
         });
     };
     this.addPassengers = function(payload, res) {
-        console.log(payload);
         connection.acquire(function(err, con) {
             con.query('insert into hanh_khach set ?', payload, function(err, result) {
                 con.release();
-                console.log(err);
                 if (err) {
                     res.send({ status: 1, message: 'Record creation failed' });
                 } else {

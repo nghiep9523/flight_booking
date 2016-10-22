@@ -155,16 +155,22 @@ app.controller('MainCtrl', ['$scope', '$http', function($scope, $http) {
                     alert("Không còn vé cho chiều đi");
 
                 }
-                console.log();
                 for (var i = 0; i < data.length; i++) {
                     var item = {};
+                    var timeStr = data[i].Ngay;
+                    var date = new Date(timeStr);
+                    var day = date.getDate();
+                    var year = date.getFullYear();
+                    var month = date.getMonth()+1;
+                    var dateStr = year+"-"+month+"-"+day;
                     item.Ma = data[i].Ma;
-                    item.Ngay = data[i].Ngay;
+                    item.Ngay = dateStr;
                     item.Gio = data[i].Gio;
                     item.ThoiGianBay = data[i].ThoiGianBay;
                     item.Hang = data[i].Hang;
                     item.MucGia = data[i].MucGia;
                     item.GiaBan = data[i].GiaBan;
+                    item.SoLuong = data[i].SoLuong;
                     listFlighs_temp1.push(item);
                 }
             })
@@ -188,6 +194,7 @@ app.controller('MainCtrl', ['$scope', '$http', function($scope, $http) {
 
                     for (var i = 0; i < data.length; i++) {
                         var item = {};
+                        console.log(data[i].Ngay);
                         item.Ma = data[i].Ma;
                         item.Ngay = data[i].Ngay;
                         item.Gio = data[i].Gio;
@@ -345,8 +352,9 @@ app.controller('FlightCtrl', ['$scope', '$http', function($scope, $http) {
         stt++;
         madatcho = lpad(stt, 6);
         var item = {};
+        var today = new Date();
         item.Ma = madatcho;
-        item.ThoiGianDatCho = new Date();
+        item.ThoiGianDatCho = today.toISOString().substring(0, 10);
 
         for (var i = 0; i < chooseFlight.length; i++) {
             tongtien += chooseFlight[i].GiaBan;
@@ -362,12 +370,14 @@ app.controller('FlightCtrl', ['$scope', '$http', function($scope, $http) {
                     var item1 = {};
                     item1.MaDatCho = madatcho;
                     item1.MaChuyenBay = chooseFlight[i].Ma;
-                    item1.Ngay = chooseFlight[i].Ngay;
+                    item1.Ngay = chooseFlight[i].Ngay.substring(0, 10);
                     item1.Hang = chooseFlight[i].Hang;
                     item1.MucGia = chooseFlight[i].MucGia;
                     item1.GiaBan = chooseFlight[i].GiaBan;
 
-                    $http.post('/detail', item1)
+                    console.log(item1.Ngay);
+
+                    $http.post('/flights/detail', item1)
                         .success(function(data) {
                             $scope.text = "Update successful";
                         })

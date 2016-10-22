@@ -12,7 +12,7 @@ function Booking() {
 
   this.getBooking = function(res) {
     connection.acquire(function(err, con) {
-      con.query('select * from dat_ve', id, function(err, result) {
+      con.query('select * from dat_ve', function(err, result) {
         con.release();
         res.send(result);
       });
@@ -23,6 +23,7 @@ function Booking() {
     connection.acquire(function(err, con) {
       con.query('insert into dat_ve set ?', payload, function(err, result) {
         con.release();
+        console.log(err)
         if (err) {
           res.send({status: 1, message: 'Record created failed'});
         } else {

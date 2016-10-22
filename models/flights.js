@@ -23,7 +23,7 @@ function Flights() {
     };
     this.searchFlights = function(query, res) {
         connection.acquire(function(err, con) {
-            con.query('select chuyen_bay.Ma, chuyen_bay.Ngay, chuyen_bay.Gio, chuyen_bay.ThoiGianBay, chi_tiet_chuyen_bay.Hang, chi_tiet_chuyen_bay.MucGia, chi_tiet_chuyen_bay.GiaBan from chuyen_bay inner join thong_tin_chuyen_bay inner join chi_tiet_chuyen_bay where chuyen_bay.Ma = thong_tin_chuyen_bay.Ma and chuyen_bay.Ma = chi_tiet_chuyen_bay.MaChuyenBay and thong_tin_chuyen_bay.NoiDi = ? and thong_tin_chuyen_bay.NoiDen = ? and chuyen_bay.Ngay = ?', [query.from, query.to, query.date], function(err, result) {
+            con.query('select distinct chuyen_bay.Ma, chuyen_bay.Ngay, chuyen_bay.Gio, chuyen_bay.ThoiGianBay, chi_tiet_chuyen_bay.Hang, chi_tiet_chuyen_bay.MucGia, chi_tiet_chuyen_bay.GiaBan, thong_tin_ve.SoLuong from chuyen_bay inner join thong_tin_chuyen_bay on chuyen_bay.Ma = thong_tin_chuyen_bay.Ma inner join chi_tiet_chuyen_bay on chuyen_bay.Ma = chi_tiet_chuyen_bay.MaChuyenBay and chuyen_bay.Ngay = chi_tiet_chuyen_bay.Ngay inner join loai_ve on chuyen_bay.ThongTinVe = loai_ve.Ma inner join thong_tin_ve on loai_ve.MaThongTin = thong_tin_ve.Ma where thong_tin_chuyen_bay.NoiDi = ? and thong_tin_chuyen_bay.NoiDen = ? and chuyen_bay.Ngay = ? and thong_tin_ve.SoLuong = ?', [query.from, query.to, query.date, query.amount], function(err, result) {
                 con.release();
                 res.send(result);
             });
