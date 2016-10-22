@@ -1,0 +1,122 @@
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Mã</th>
+        <th>Sân bay đi</th>
+        <th>Sân bay đến</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="student in listStudents" id = {{student.id}}>
+        <td class="id">{{$index}}</td>
+        <td class="id">SGN</td>
+        <td class="id">HAN</td>
+        <td align="center"> <button style="background:blue; color:white" type="button" class="btn btn-default" ng-click="fill(student.id)" data-toggle="modal" data-target="#myModal">Chỉnh sửa</button>
+        <button style="background:green; color:white" type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal1" >Quá cảnh</button>
+         <button style="background:red; color:white" type="button" class="btn btn-default" ng-click="delete(student.id)">Xóa</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <button style="background:green; color:white" type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal" ng-click="fillInsert()">Thêm chuyến bay</button>
+       <!-- Modal -->
+        <div id="myModal" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{title}}</h4>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                  <label >Mã</label>
+                  <input class="form-control" id="name" type="text">
+                  </div>
+                  <div class="form-group">
+                  <label >Sân bay đi</label>
+                  <input class="form-control" id="name" type="text">
+                  </div>
+                  <div class="form-group">
+                  <label >Sân bay đến</label>
+                  <input class="form-control" id="name" type="text">
+                  </div>
+              </div>
+              <div class="modal-footer">
+               <button ng-show = "isUpdate()" style="background:blue; color:white" type="button" class="btn btn-default" data-dismiss="modal" ng-click="update(sid)">Lưu</button>
+               <button ng-hide = "isUpdate()" style="background:blue; color:white" type="button" class="btn btn-default" data-dismiss="modal" ng-click="insert()">Thêm mới</button>
+                <button type="button" class="btn btn-default" ng-click="dismissModal('myModal')">Hủy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+         <!-- Modal -->
+        <div id="myModal1" class="modal fade" role="dialog">
+          <div class="modal-dialog">    <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Thông tin quá cảnh</h4>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                 <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Nơi quá cảnh</th>
+                        <th>Thứ tự</th>
+                        <th>Thời gian</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="student in listStudents" id = {{student.id}}>
+                        <td class="id">SGN</td>
+                        <td class="id">{{$index}}</td>
+                        <td class="id">40 phút</td>
+                        <td align="center"> <button style="background:blue; color:white" type="button" class="btn btn-default" ng-click="fill(student.id)" data-toggle="modal" data-target="#myModal2">Chỉnh sửa</button>
+                        <button style="background:red; color:white" type="button" class="btn btn-default" ng-click="delete(student.id)">Xóa</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <button style="background:green; color:white" type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal2" ng-click="fillInsert()">Thêm mới</button>
+              </div>
+              <div class="modal-footer">
+               <button style="background:blue; color:white" type="button" class="btn btn-default" data-dismiss="modal" ng-click="update(sid)">Lưu</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    <!-- Modal -->
+        <div id="myModal2" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" ng-click="dismissModal('myModal2')">&times;</button>
+                <h4 class="modal-title">Chỉnh sửa</h4>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                  <label >Nơi quá cảnh</label>
+                  <input class="form-control" id="id" type="text">
+                  </div>
+               <div class="form-group">
+                  <label >Thứ tự</label>
+                  <input class="form-control" id="name" type="text">
+                  </div>
+                  <div class="form-group">
+                  <label >Thời gian</label>
+                  <input class="form-control" id="birthday" type="text">
+                  </div>
+              </div>
+              <div class="modal-footer">
+               <button ng-show = "isUpdate()" style="background:blue; color:white" type="button" class="btn btn-default" data-dismiss="modal" ng-click="update(sid)">Lưu</button>
+               <button ng-hide = "isUpdate()" style="background:blue; color:white" type="button" class="btn btn-default" data-dismiss="modal" ng-click="insert()">Thêm mới</button>
+                <button type="button" class="btn btn-default" ng-click="dismissModal('myModal2')">Hủy</button>
+              </div>
+            </div>
+          </div>
+        </div>

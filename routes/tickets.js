@@ -3,7 +3,7 @@ var router = express.Router();
 var tickets = require('../models/tickets');
 
 router.get('/', function(req, res) {
-  tickets.getTickets(res);
+  tickets.getTickets(req.query, res);
 });
 router.post('/', function(req, res) {
 	tickets.addTicket(req.body, res);

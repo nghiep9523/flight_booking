@@ -15,7 +15,7 @@ router.put('/', function(req, res) {
   flights.updateFlight(req.body,res);
 });
 router.delete('/', function(req, res) {
-  flights.deleteFlight(req.body,res);
+  flights.deleteFlight(req.query,res);
 });
 
 router.get('/info', function(req, res) {
@@ -33,10 +33,6 @@ router.delete('/info', function(req, res) {
 
 router.get('/detail/:id', function(req, res) {
   flights.getFlightDetail(req.params.id, res);
-});
-
-router.post('/detail', function(req, res) {
-  flights.addFlightDetail(req.body, res);
 });
 
 module.exports = router;
