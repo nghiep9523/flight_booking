@@ -11,11 +11,14 @@ var airports = require('./routes/airports');
 var flights = require('./routes/flights');
 var passengers = require('./routes/passengers');
 var booking = require('./routes/booking');
+var tickets = require('./routes/tickets');
+var transits = require('./routes/transits');
+
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -30,7 +33,10 @@ app.use('/airports', airports);
 app.use('/booking', booking);
 app.use('/flights', flights);
 app.use('/passengers', passengers);
+app.use('/tickets', tickets);
+app.use('/transits', transits);
 
+var server = require('http').createServer(app);
 connection.init();
 
 // catch 404 and forward to error handler
@@ -64,5 +70,5 @@ app.use(function(err, req, res, next) {
   });
 });
 
-
+server.listen(3000);
 module.exports = app;

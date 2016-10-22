@@ -6,7 +6,7 @@ router.get('/info/:id', function(req, res) {
   booking.getBookingInfo(req.params.id, res);
 });
 router.get('/', function(req, res) {
-  //TODO return view
+  booking.getBooking(res);
 });
 router.post('/', function(req, res) {
   booking.bookFlight(req.body, res);
