@@ -33,7 +33,7 @@ function change_type(a) {
 		document.getElementById("khuhoi").className += " btn_in_form";
 		document.getElementById("khuhoi").className += " btn btn-default";
 		document.getElementById("motchieu").className += " btn-info";
-
+		document.getElementById("example2").required = false;
 		document.getElementById("example2").style.display = "none";
 
 		document.getElementById("arrow").src="images/arrow1.png";
@@ -43,4 +43,8 @@ function change_type(a) {
 
 function displayname(name) {
 	document.getElementById("menu1").text() = name;
+}
+
+function chooseDanhXung(id, str) {
+	document.getElementById(id).value = str;
 }
