@@ -48,3 +48,19 @@ function displayname(name) {
 function chooseDanhXung(id, str) {
 	document.getElementById(id).value = str;
 }
+
+$(function () {
+  $('[data-toggle="popover"]').popover();
+  
+  $('#cvc').on('click', function(){
+    if ( $('.cvc-preview-container').hasClass('hide') ) {
+      $('.cvc-preview-container').removeClass('hide');
+    } else {
+      $('.cvc-preview-container').addClass('hide');
+    }    
+  });
+  
+  $('.cvc-preview-container').on('click', function(){
+    $(this).addClass('hide');
+  });
+});

@@ -37,6 +37,11 @@ app.config(['$stateProvider', '$urlRouterProvider',
                 templateUrl: '/templates/passenger.html',
                 controller: 'PassengerCtrl'
             })
+            .state('payment', {
+                url: '/payment',
+                templateUrl: '/templates/payment.html',
+                controller: 'paymentCtrl'
+            })
             .state('confirmBooking', {
                 url: '/confirm',
                 templateUrl: '/templates/confirm.html',
@@ -272,7 +277,7 @@ app.controller('FlightCtrl', ['$scope', '$http', function($scope, $http) {
     }
 
     $scope.booking = function() {
-
+        tongtien = 0;
         $http.get('/tickets/info')
             .success(function(data) {
                 $scope.text = "Get successful";
@@ -292,7 +297,8 @@ app.controller('FlightCtrl', ['$scope', '$http', function($scope, $http) {
 
                     thong_tin_ve.push(temp);
                 }
-                dat_ve.TongTien = tongtien * sohanhkhach;
+                tongtien = tongtien * sohanhkhach;
+                dat_ve.TongTien = tongtien;
                 dat_ve.TrangThai = 0;
 
                 $http.post('/booking', dat_ve)
@@ -375,7 +381,18 @@ app.controller('PassengerCtrl', ['$scope', '$http', function($scope, $http) {
                     $scope.text = "Error: " + data;
                 });
         }
+    }
+}]);
 
+function GetTongTien(scope) {
+    scope.tong_tien = tongtien;
+}
+
+app.controller('paymentCtrl', ['$scope', '$http', function($scope, $http) {
+
+    GetTongTien($scope);
+
+    $scope.confirm = function() {
         $http.put('/booking', dat_ve)
             .success(function(data) {
                 $scope.text = "Update successful";
