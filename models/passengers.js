@@ -32,8 +32,9 @@ function Passengers() {
         });
     };
     this.getPassengersWithId = function(payload, res) {
+        console.log(payload);
         connection.acquire(function(err, con) {
-            con.query('select * from hanh_khach where MaDatCho = ?', payload, function(err, result) {
+            con.query('select * from hanh_khach where MaDatCho = ?', payload.id, function(err, result) {
                 con.release();
                 res.send(result);
             });

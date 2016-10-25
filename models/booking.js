@@ -1,10 +1,25 @@
-var connection = require('../connection');
+ var connection = require('../connection');
 
 function Booking() {
-  this.getBookingInfo = function(id, res) {
+  this.getBookingInfo = function(req, res) {
+    console.log("Hello");
     connection.acquire(function(err, con) {
-      con.query('select dat_ve.Ma, dat_ve.ThoiGianDatCho, dat_ve.TongTien, chi_tiet_chuyen_bay.MaChuyenBay, chi_tiet_chuyen_bay.Ngay, chi_tiet_chuyen_bay.Hang, chi_tiet_chuyen_bay.MucGia, chi_tiet_chuyen_bay.GiaBan from dat_ve, chi_tiet_chuyen_bay where dat_ve.Ma = ? and dat_ve.Ma = chi_tiet_chuyen_bay.MaDatCho', id, function(err, result) {
+      con.query('select MaChuyenBay, Ngay, Hang, MucGia, GiaBan from chi_tiet_chuyen_bay where MaDatCho = ?', req.id, function(err, result) {
         con.release();
+        if (err)
+          console.log(err);
+        res.send(result);
+      });
+    });
+  };
+
+ this.getBookingInfoByFlight = function(req, res) {
+    console.log("Hello");
+    connection.acquire(function(err, con) {
+      con.query('select MaDatCho, Hang, MucGia, GiaBan from chi_tiet_chuyen_bay where MaChuyenBay = ? and Ngay =?', [req.flight, req.date], function(err, result) {
+        con.release();
+        if (err)
+          console.log(err);
         res.send(result);
       });
     });
@@ -12,7 +27,7 @@ function Booking() {
 
   this.getBooking = function(res) {
     connection.acquire(function(err, con) {
-      con.query('select * from dat_ve', id, function(err, result) {
+      con.query('select * from dat_ve', function(err, result) {
         con.release();
         res.send(result);
       });
