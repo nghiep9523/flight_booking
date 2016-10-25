@@ -21,13 +21,13 @@
 </head>
 <body ng-app="bt1" ng-controller="AdminCtrl">
   <div class="header">
-  <a href = "#/home">
+  <a href = "#/home" onclick="refreshPage()">
     <img id="banner" src="images/logo_vna-mobile.png">
     </a>
     <button ng-hide = "isAdmin()" id="onl_booking" type="button" class="btn btn-primary booking_btn" onclick="booking_display()">ĐẶT VÉ TRỰC TUYẾN</button>
-    <form action="#/home" ng-show = "isAdmin()" style="float:right">
-    <input type="submit" type="button" class="btn btn-primary booking_btn" value="Quay lại đặt vé" />
-    </form>
+   
+    <button style = "float:right" ng-show="isAdmin()" type="submit" type="button" class="btn btn-primary booking_btn" value="Quay lại đặt vé">Nhấn vào logo Vietnam airlines ở góc trái để quay lại trang đặt vé</button>
+    
      <form action="#/flightschedule" ng-hide = "isAdmin()" style="float:right">
     <input type="submit" type="button" class="btn btn-primary booking_btn" value="Đến trang Admin" />
     </form>

@@ -15,10 +15,10 @@ router.get('/infobyflight', function(req, res) {
 router.get('/', function(req, res) {
   booking.getBooking(res);
 });
-router.post('/', function(req, res) {
+router.put('/', function(req, res) {
   booking.bookFlight(req.body, res);
 });
-router.put('/', function(req, res) {
+router.put('/:id', function(req, res) {
   booking.confirmBooking(req.body, res);
 });
 router.delete('/', function(req, res) {

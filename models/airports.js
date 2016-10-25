@@ -13,7 +13,7 @@ function Airports() {
 
   this.getDestinationAirport = function(id, res) {
     connection.acquire(function(err, con) {
-      con.query('select * from san_bay inner join (thong_tin_chuyen_bay) where san_bay.Ma = thong_tin_chuyen_bay.NoiDen and thong_tin_chuyen_bay.NoiDi = ?', id, function(err, result) {
+      con.query('SELECT distinct t.NoiDen, u.TenDiaDanh FROM thong_tin_chuyen_bay t inner join san_bay u on t.NoiDen = u.Ma where t.NoiDi = ?', id, function(err, result) {
         con.release();
         res.send(result);
       });

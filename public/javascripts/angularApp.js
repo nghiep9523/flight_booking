@@ -48,28 +48,34 @@ app.config(['$stateProvider', '$urlRouterProvider',
                 controller: 'confirmCtrl',
             })
             .state('flightschedule', {
-            url : '/flightschedule',
-            templateUrl : '/templates/flightschedule.html',
-            controller : 'FlightScheduleCtrl',
+                url: '/flightschedule',
+                templateUrl: '/templates/flightschedule.html',
+                controller: 'FlightScheduleCtrl',
             })
             .state('flight', {
-                url : '/flight',
-                templateUrl : '/templates/flight.html',
-                controller : 'FlightAdminCtrl'
-                
+                url: '/flight',
+                templateUrl: '/templates/flight.html',
+                controller: 'FlightAdminCtrl'
+
             })
             .state('ticketmanage', {
-                url : '/ticketmanage',
-                templateUrl : '/templates/ticketmanage.html',
-                controller : 'TicketCtrl',
+                url: '/ticketmanage',
+                templateUrl: '/templates/ticketmanage.html',
+                controller: 'TicketCtrl',
             })
         $urlRouterProvider.otherwise('home');
         // body...
     }
 ]);
 
+var isRefresh = false;
+
 function loadData(scope, http) {
-    scope.listStudents = [];
+    if (!isRefresh) {
+
+        isRefresh = true;
+    }
+    scope.listFlights = [];
     thong_tin_ve = [];
     chooseFlight = [];
     listFlighs_temp1 = [];
@@ -86,7 +92,7 @@ function loadData(scope, http) {
                 item.TenDiaDanh = data[i].TenDiaDanh;
                 item.TenSanBay = data[i].TenSanBay;
                 item.SanBayDen = data[i].SanBayDen;
-                scope.listStudents.push(item);
+                scope.listFlights.push(item);
             }
             scope.text = item;
             //console.log(data);
@@ -96,86 +102,78 @@ function loadData(scope, http) {
         });
 }
 
-function loadFlights(scope, http)
-{
-      scope.listFlights = [];
-      http.get('/flights')
-     .success(function(data) {
-        for (var i = 0; i < data.length; i++) 
-        {
-            var item = {};
-            item.Ma = data[i].Ma;
-            item.Ngay = data[i].Ngay;
-            item.Gio = data[i].Gio;
-            item.ThoiGianBay = data[i].ThoiGianBay;
-            item.ThongTinVe = data[i].ThongTinVe;
-            scope.listFlights.push(item);
-        }
-     })
-     .error(function(data, status) {
-            //scope.text = "Error: " + data;
-        });
-}
-
-function loadFlightInfo(scope, http)
-{
-     scope.flightsInfo = [];
-     http.get('/flights/info')
-     .success(function(data) {
-        for (var i = 0; i < data.length; i++) 
-        {
-            var item = {};
-            item.Ma = data[i].Ma;
-            item.NoiDi = data[i].NoiDi;
-            item.NoiDen = data[i].NoiDen;
-            item.QuaCanh = data[i].QuaCanh;
-            scope.flightsInfo.push(item);
-        }
-     })
-     .error(function(data, status) {
-            //scope.text = "Error: " + data;
-        });
-}
-
-function loadTickets(scope, http, flight, date)
-{
-        scope.Tickets = [];
-        http.get('/tickets?flight=' + flight + '&date=' + date)
+function loadFlights(scope, http) {
+    scope.listFlights = [];
+    http.get('/flights')
         .success(function(data) {
-        for (var i = 0; i < data.length; i++) 
-        {
-            var item = {};
-            item.MaThongTin = data[i].MaThongTin;
-            item.MaLoaiVe = data[i].MaLoaiVe;
-            item.LoaiVe = data[i].Hang;
-            item.MucGia = data[i].MucGia;
-            item.SoLuong = data[i].SoLuong;
-            item.GiaBan = data[i].GiaBan;
-            item.MaCB = flight;
-            item.Ngay = date;
-            scope.Tickets.push(item);
-        }
-     })
-         .error(function(data, status) {
+            for (var i = 0; i < data.length; i++) {
+                var item = {};
+                item.Ma = data[i].Ma;
+                item.Ngay = data[i].Ngay;
+                item.Gio = data[i].Gio;
+                item.ThoiGianBay = data[i].ThoiGianBay;
+                item.ThongTinVe = data[i].ThongTinVe;
+                scope.listFlights.push(item);
+            }
+        })
+        .error(function(data, status) {
+            //scope.text = "Error: " + data;
+        });
+}
+
+function loadFlightInfo(scope, http) {
+    scope.flightsInfo = [];
+    http.get('/flights/info')
+        .success(function(data) {
+            for (var i = 0; i < data.length; i++) {
+                var item = {};
+                item.Ma = data[i].Ma;
+                item.NoiDi = data[i].NoiDi;
+                item.NoiDen = data[i].NoiDen;
+                item.QuaCanh = data[i].QuaCanh;
+                scope.flightsInfo.push(item);
+            }
+        })
+        .error(function(data, status) {
+            //scope.text = "Error: " + data;
+        });
+}
+
+function loadTickets(scope, http, flight, date) {
+    scope.Tickets = [];
+    http.get('/tickets?flight=' + flight + '&date=' + date)
+        .success(function(data) {
+            for (var i = 0; i < data.length; i++) {
+                var item = {};
+                item.MaThongTin = data[i].MaThongTin;
+                item.MaLoaiVe = data[i].MaLoaiVe;
+                item.LoaiVe = data[i].Hang;
+                item.MucGia = data[i].MucGia;
+                item.SoLuong = data[i].SoLuong;
+                item.GiaBan = data[i].GiaBan;
+                item.MaCB = flight;
+                item.Ngay = date;
+                scope.Tickets.push(item);
+            }
+        })
+        .error(function(data, status) {
             var test = "test";
         });
 }
 
-function loadBooking(scope, http)
-{
-        scope.bookingList = [];
-        http.get('/booking')
+function loadBooking(scope, http) {
+    scope.bookingList = [];
+    http.get('/booking')
         .success(function(data) {
-        for (var i = 0; i < data.length; i++) 
-        {
-            var item = {};
-            item.Ma = data[i].Ma;
-            item.ThoiGianDatCho = data[i].ThoiGianDatCho;
-            item.TongTien = data[i].TongTien;
-            item.TrangThai = data[i].TrangThai;
-            scope.bookingList.push(item);
-        }
-     });
+            for (var i = 0; i < data.length; i++) {
+                var item = {};
+                item.Ma = data[i].Ma;
+                item.ThoiGianDatCho = data[i].ThoiGianDatCho;
+                item.TongTien = data[i].TongTien;
+                item.TrangThai = data[i].TrangThai;
+                scope.bookingList.push(item);
+            }
+        });
 }
 
 app.controller('MainCtrl', ['$scope', '$http', function($scope, $http) {
@@ -188,15 +186,16 @@ app.controller('MainCtrl', ['$scope', '$http', function($scope, $http) {
 
      };*/
 
+
     $(document).ready(function() {
 
         $("#example1").datepicker({
-            // startDate: new Date(), 
-            dateFormat: 'yy-mm-dd'
+             startDate: new Date()
         });
         $("#example2").datepicker({
-            // startDate: new Date() 
+             startDate: new Date()
         });
+
     });
 
     $scope.change_type = function(a) {
@@ -227,18 +226,16 @@ app.controller('MainCtrl', ['$scope', '$http', function($scope, $http) {
 
     $scope.chooseSanBayDi = function(flight) {
         document.getElementById("menu1").value = flight.TenDiaDanh;
-        $scope.listDesStudents = [];
+        $scope.listDesAirports = [];
         sanbaydi = flight.Ma;
         dia_danh_di = flight.TenDiaDanh;
         $http.get('/airports/' + flight.Ma)
             .success(function(data) {
                 for (var i = 0; i < data.length; i++) {
                     var item = {};
-                    item.Ma = data[i].Ma;
-                    item.TenSanBay = data[i].TenSanBay;
+                    item.NoiDen = data[i].NoiDen;
                     item.TenDiaDanh = data[i].TenDiaDanh;
-                    item.SanBayDen = data[i].NoiDen;
-                    $scope.listDesStudents.push(item);
+                    $scope.listDesAirports.push(item);
                 }
                 $scope.text = item;
                 //console.log(data);
@@ -250,7 +247,7 @@ app.controller('MainCtrl', ['$scope', '$http', function($scope, $http) {
 
     $scope.display_name = function(flight, a) {
         document.getElementById("menu2").value = flight.TenDiaDanh;
-        sanbayden = flight.SanBayDen;
+        sanbayden = flight.NoiDen;
         dia_danh_den = flight.TenDiaDanh;
     }
 
@@ -268,26 +265,23 @@ app.controller('MainCtrl', ['$scope', '$http', function($scope, $http) {
         var length1 = 0,
             length2 = 0;
         //var result = str.split("-");
-        //ngaybay1 = result[2] + "-" + result[1] + "-" + result[0];
+        ngaybay1 = str;
 
-        $http.get('/flights/search/?from=' + sanbaydi + '&to=' + sanbayden + '&date=' + str + '&amount=' + sohanhkhach)
+        $http.get('/flights/search/?from=' + sanbaydi + '&to=' + sanbayden + '&date=' + ngaybay1 + '&amount=' + sohanhkhach)
             .success(function(data) {
                 document.getElementById("onl_booking").style.display = "none";
                 length1 = data.length;
                 if (length1 == 0) {
                     alert("Không còn vé cho chiều đi");
-
+                    if (!isKhuHoi) {
+                        alert("Không còn vé cho chiều đi");
+                        window.location.href = "/";
+                    }
                 }
                 for (var i = 0; i < data.length; i++) {
                     var item = {};
-                    var timeStr = data[i].Ngay;
-                    var date = new Date(timeStr);
-                    var day = date.getDate();
-                    var year = date.getFullYear();
-                    var month = date.getMonth() + 1;
-                    var dateStr = year + "-" + month + "-" + day;
                     item.Ma = data[i].Ma;
-                    item.Ngay = dateStr;
+                    item.Ngay = data[i].Ngay;
                     item.Gio = data[i].Gio;
                     item.ThoiGianBay = data[i].ThoiGianBay;
                     item.Hang = data[i].Hang;
@@ -304,16 +298,18 @@ app.controller('MainCtrl', ['$scope', '$http', function($scope, $http) {
 
         if (isKhuHoi) {
             var str2 = document.getElementById("example2").value;
-            var result2 = str2.split("-");
-            ngaybay2 = result2[2] + "-" + result2[1] + "-" + result2[0];
+            ngaybay2 = str2;
 
-            $http.get('/flights/search/?from=' + sanbayden + '&to=' + sanbaydi + '&date=' + ngaybay2)
+            $http.get('/flights/search/?from=' + sanbayden + '&to=' + sanbaydi + '&date=' + ngaybay2 + '&amount=' + sohanhkhach)
                 .success(function(data) {
                     document.getElementById("onl_booking").style.display = "none";
                     console.log();
                     length2 = data.length;
                     if (length2 == 0) {
                         alert("Không còn vé cho chiều về");
+                        if (length1 == 0) {
+                            window.location.href = "/";
+                        }
                     }
 
                     for (var i = 0; i < data.length; i++) {
@@ -339,13 +335,13 @@ app.controller('MainCtrl', ['$scope', '$http', function($scope, $http) {
 
 
 
-   /*  var currentTab = 'tab1';
-     $scope.changeState = function(s)
-     {
-        $('#' + currentTab).removeClass("active");
-        $('#' + s).addClass("active");
-        currentTab = s;
-     }*/
+    /*  var currentTab = 'tab1';
+      $scope.changeState = function(s)
+      {
+         $('#' + currentTab).removeClass("active");
+         $('#' + s).addClass("active");
+         currentTab = s;
+      }*/
 
 
 }]);
@@ -378,13 +374,24 @@ var oldchoose = 0;
 app.controller('FlightCtrl', ['$scope', '$http', function($scope, $http) {
     GetData($scope, $http);
     var isChoose = false;
+    var chooseItem = [];
     $scope.choose = function(flight, iForm) {
-        if (oldchoose == iForm) {
-            chooseFlight = [];
+        document.getElementById("btn_dat_ve").disabled = true;
+        if (chooseItem.length > 0) {
+            for (var i = 0; i < chooseItem.length; i++) {
+                if (chooseItem[i] == iForm) {
+                    chooseFlight.splice(chooseFlight.indexOf(flight), 1);
+                    chooseItem.splice(chooseItem.indexOf(iForm), 1);
+                }
+
+            }
         }
         oldchoose = iForm;
+        chooseItem.push(iForm);
         chooseFlight.push(flight);
         isChoose = false;
+        if ((!isKhuHoi && chooseFlight.length == 1) || ((isKhuHoi && chooseFlight.length == 2)))
+            document.getElementById("btn_dat_ve").disabled = false;
     }
 
     $scope.booking = function() {
@@ -412,7 +419,7 @@ app.controller('FlightCtrl', ['$scope', '$http', function($scope, $http) {
                 dat_ve.TongTien = tongtien;
                 dat_ve.TrangThai = 0;
 
-                $http.post('/booking', dat_ve)
+                $http.put('/booking', dat_ve)
                     .success(function(data) {
                         $scope.text = "Update successful";
 
@@ -470,7 +477,7 @@ function creationInfoForm() {
 
 var iscall = false;
 app.controller('PassengerCtrl', ['$scope', '$http', function($scope, $http) {
-     adminMode = 0;
+    adminMode = 0;
     if (iscall == false) {
         creationInfoForm();
         iscall = true;
@@ -485,7 +492,7 @@ app.controller('PassengerCtrl', ['$scope', '$http', function($scope, $http) {
             item.Ho = document.getElementById("ho" + i.toString()).value;
             item.Ten = document.getElementById("demvaten" + i.toString()).value;
 
-            $http.post('/passengers', item)
+            $http.put('/passengers', item)
                 .success(function(data) {
                     $scope.text = "Insert successful";
                 })
@@ -501,11 +508,11 @@ function GetTongTien(scope) {
 }
 
 app.controller('paymentCtrl', ['$scope', '$http', function($scope, $http) {
-     adminMode = 0;
+    adminMode = 0;
     GetTongTien($scope);
 
     $scope.confirm = function() {
-        $http.put('/booking', dat_ve)
+        $http.put('/booking/' + dat_ve.Ma, dat_ve)
             .success(function(data) {
                 $scope.text = "Update successful";
                 for (var i = 0; i < thong_tin_ve.length; i++) {
@@ -528,251 +535,223 @@ app.controller('paymentCtrl', ['$scope', '$http', function($scope, $http) {
 }]);
 
 app.controller('confirmCtrl', ['$scope', '$http', function($scope, $http) {
-
+    $scope.RefreshPage = function() {
+        isRefresh = false;
+                location.reload();
+    }
 }]);
 
 //-------------------------------------------------------------------------------------
 
-app.controller('AdminCtrl',['$scope', '$http', function($scope, $http)
-{
+app.controller('AdminCtrl', ['$scope', '$http', function($scope, $http) {
     var currentTab = 'tab1';
-     $scope.changeState = function(s)
-     {
+    $scope.changeState = function(s) {
         $('#' + currentTab).removeClass("active");
         $('#' + s).addClass("active");
         currentTab = s;
-     }
+    }
 
-     $scope.isUpdate = function()
-     {
+    $scope.isUpdate = function() {
         if (update == 1) return true;
         return false;
-     };
+    };
 
-     $scope.dismissModal = function(s)
-     {
+    $scope.dismissModal = function(s) {
         $('#' + s).modal('hide');
-     };
-     $scope.isAdmin = function()
-     {
+    };
+    $scope.isAdmin = function() {
         if (adminMode == 1) return true;
         return false;
-     }
- }]);
+    }
+}]);
 
-app.controller('TicketCtrl', ['$scope', '$http', function($scope, $http){
-     $('#flight').hide();
+app.controller('TicketCtrl', ['$scope', '$http', function($scope, $http) {
+    $('#flight').hide();
     adminMode = 1;
-     $scope.changeViewMode = function(s)
-     {
-        if (s == '1')
-        {
-             $('#viewMode').text('Xem theo mã đặt chỗ');
-             $('#flight').hide();
-             $('#code').show();
+    $scope.changeViewMode = function(s) {
+        if (s == '1') {
+            $('#viewMode').text('Xem theo mã đặt chỗ');
+            $('#flight').hide();
+            $('#code').show();
+        } else {
+            $('#viewMode').text('Xem theo chuyến bay');
+            $('#flight').show();
+            $('#code').hide();
+
+            loadFlights($scope, $http);
         }
-        else
-        { 
-             $('#viewMode').text('Xem theo chuyến bay');
-             $('#flight').show();
-             $('#code').hide();
+    }
 
-             loadFlights($scope, $http);
-        } 
-     }
-
-     loadBooking($scope, $http);
-     $scope.viewTicket = function(id)
-     {
+    loadBooking($scope, $http);
+    $scope.viewTicket = function(id) {
         $scope.Tickets = [];
         $http.get('/booking/info?id=' + id)
-        .success(function(data) {
-        for (var i = 0; i < data.length; i++) 
-        {
-            var item = {};
-            item.MaChuyenBay = data[i].MaChuyenBay;
-            item.Ngay = data[i].Ngay;
-            item.Hang = data[i].Hang;
-            item.MucGia = data[i].MucGia;
-            item.GiaBan = data[i].GiaBan;
-            $scope.Tickets.push(item);
-        }
-     })
-         .error(function(data, status) {
-            var test = "test";
-        });
-     }
-
-          $scope.viewPassenger = function(id)
-        {
-            $scope.Passengers = [];
-            $http.get('/passengers?id=' + id)
             .success(function(data) {
-            for (var i = 0; i < data.length; i++) 
-            {
-                var item = {};
-                item.DanhXung = data[i].DanhXung;
-                item.Ho = data[i].Ho;
-                item.Ten = data[i].Ten;
-                $scope.Passengers.push(item);
-            }
+                for (var i = 0; i < data.length; i++) {
+                    var item = {};
+                    item.MaChuyenBay = data[i].MaChuyenBay;
+                    item.Ngay = data[i].Ngay;
+                    item.Hang = data[i].Hang;
+                    item.MucGia = data[i].MucGia;
+                    item.GiaBan = data[i].GiaBan;
+                    $scope.Tickets.push(item);
+                }
             })
-             .error(function(data, status) {
+            .error(function(data, status) {
                 var test = "test";
             });
-     }
-     $scope.viewTicketByFlight = function(flight, date)
-     {
+    }
+
+    $scope.viewPassenger = function(id) {
+        $scope.Passengers = [];
+        $http.get('/passengers?id=' + id)
+            .success(function(data) {
+                for (var i = 0; i < data.length; i++) {
+                    var item = {};
+                    item.DanhXung = data[i].DanhXung;
+                    item.Ho = data[i].Ho;
+                    item.Ten = data[i].Ten;
+                    $scope.Passengers.push(item);
+                }
+            })
+            .error(function(data, status) {
+                var test = "test";
+            });
+    }
+    $scope.viewTicketByFlight = function(flight, date) {
         $scope.Tickets = [];
-        $http.get('/booking/infobyflight?flight=' + flight +'&date=' + date)
-        .success(function(data) {
-        for (var i = 0; i < data.length; i++) 
-        {
-            var item = {};
-            item.MaDatCho = data[i].MaDatCho;
-            item.Hang = data[i].Hang;
-            item.MucGia = data[i].MucGia;
-            item.GiaBan = data[i].GiaBan;
-            $scope.Tickets.push(item);
-        }
-        })
-         .error(function(data, status) {
-            var test = "test";
-        });
-     }
+        $http.get('/booking/infobyflight?flight=' + flight + '&date=' + date)
+            .success(function(data) {
+                for (var i = 0; i < data.length; i++) {
+                    var item = {};
+                    item.MaDatCho = data[i].MaDatCho;
+                    item.Hang = data[i].Hang;
+                    item.MucGia = data[i].MucGia;
+                    item.GiaBan = data[i].GiaBan;
+                    $scope.Tickets.push(item);
+                }
+            })
+            .error(function(data, status) {
+                var test = "test";
+            });
+    }
 }]);
 
 
-app.controller('FlightAdminCtrl',['$scope', '$http', function($scope, $http){
-    
-   adminMode = 1;
-    loadFlightInfo($scope, $http);
-   
+app.controller('FlightAdminCtrl', ['$scope', '$http', function($scope, $http) {
 
-    $scope.fillUpdate= function(id)
-     {
+    adminMode = 1;
+    loadFlightInfo($scope, $http);
+
+
+    $scope.fillUpdate = function(id) {
         $scope.title = "Chỉnh sửa";
         update = 1;
         document.getElementById("id").value = $scope.flightsInfo[id].Ma;
         document.getElementById("start").value = $scope.flightsInfo[id].NoiDi;
         document.getElementById("end").value = $scope.flightsInfo[id].NoiDen;
         $scope.sid = $scope.flightsInfo[id].Ma;
-     }
+    }
 
-      $scope.updateFlight = function(id)
-     {
-            var temp = {};
-            temp.MaCB = id;
-            temp.MaCBMoi = document.getElementById("id").value;
-            temp.NoiDi = document.getElementById("start").value;
-            temp.NoiDen = document.getElementById("end").value;
-            $http.put('/flights/info', temp)
-            .success(function(data)
-            {
+    $scope.updateFlight = function(id) {
+        var temp = {};
+        temp.MaCB = id;
+        temp.MaCBMoi = document.getElementById("id").value;
+        temp.NoiDi = document.getElementById("start").value;
+        temp.NoiDen = document.getElementById("end").value;
+        $http.put('/flights/info', temp)
+            .success(function(data) {
                 //$scope.text = "Update successful";
-                if (data['status'] == 0)
-                {
+                if (data['status'] == 0) {
                     loadFlightInfo($scope, $http);
                     alert('Cập nhật thành công');
-            }else alert('Có lỗi xảy ra khi cập nhật chuyến bay. Có thể do chuyến bay này đã tồn tại hoặc mã sân bay không tồn tại.');
-                
+                } else alert('Có lỗi xảy ra khi cập nhật chuyến bay. Có thể do chuyến bay này đã tồn tại hoặc mã sân bay không tồn tại.');
+
             })
             .error(function(data, status) {
                 //$scope.text = "Error: " + data;
                 var test = "dfsdfs";
             });
-     }
+    }
 
-      $scope.fillInsert = function()
-     {
+    $scope.fillInsert = function() {
         update = 0;
         $scope.title = "Thêm chuyến bay";
-       
-            document.getElementById("id").value = "";
-            document.getElementById("start").value = "";
-            document.getElementById("end").value = "";
-        
-     }
 
-     $scope.insertFlight = function()
-     {
-        if (document.getElementById("id").value != '')
-        {
+        document.getElementById("id").value = "";
+        document.getElementById("start").value = "";
+        document.getElementById("end").value = "";
+
+    }
+
+    $scope.insertFlight = function() {
+        if (document.getElementById("id").value != '') {
             var temp = {};
             temp.Ma = document.getElementById("id").value;
             temp.NoiDi = document.getElementById("start").value;
             temp.NoiDen = document.getElementById("end").value;
             $http.post('/flights/info', temp)
-            .success(function(data)
-            {
-                //$scope.text = "Update successful";
-                   if (data['status'] == 0)
-                {
+                .success(function(data) {
+                    //$scope.text = "Update successful";
+                    if (data['status'] == 0) {
+                        loadFlightInfo($scope, $http);
+                        alert('Thêm mới thành công');
+                    } else alert('Có lỗi xảy ra khi thêm chuyến bay. Có thể do bạn điền thiếu thông tin hoặc do chuyến bay này đã tồn tại.');
+
+                })
+                .error(function(data, status) {
+                    //$scope.text = "Error: " + data;
+                    var test = "dfsdfs";
+                });
+        } else {
+            //$scope.text = "ID can not be null";
+
+        }
+    };
+
+    $scope.deleteFlight = function(flight) {
+        $http.delete('/flights/info?flight=' + flight)
+            .success(function(data) {
+                //$scope.text = "Delete student with id = " + d + " successful";
+                if (data['status'] == 0) {
+
                     loadFlightInfo($scope, $http);
-                     alert('Thêm mới thành công');
-            }else alert('Có lỗi xảy ra khi thêm chuyến bay. Có thể do bạn điền thiếu thông tin hoặc do chuyến bay này đã tồn tại.');
-                
+                    alert('Xóa thành công');
+                } else alert("Có lỗi xảy ra khi xóa chuyến bay này. Chuyến bay này đã được lên lịch bay.");
             })
             .error(function(data, status) {
                 //$scope.text = "Error: " + data;
-                var test = "dfsdfs";
+                var test = "";
             });
-        }
-        else
-        {
-            //$scope.text = "ID can not be null";
-           
-        } 
-     };
-
-     $scope.deleteFlight = function(flight) {
-         $http.delete('/flights/info?flight=' + flight)
-         .success(function(data) {
-            //$scope.text = "Delete student with id = " + d + " successful";
-            if (data['status'] == 0)
-            {
-                 
-                 loadFlightInfo($scope, $http);
-                 alert('Xóa thành công');
-            } 
-            else alert("Có lỗi xảy ra khi xóa chuyến bay này. Chuyến bay này đã được lên lịch bay.");
-         })
-         .error(function(data, status) {
-            //$scope.text = "Error: " + data;
-            var test = "";
-         });
-     };
+    };
 }]);
 
-app.controller('FlightScheduleCtrl',['$scope', '$http', function($scope, $http){
+app.controller('FlightScheduleCtrl', ['$scope', '$http', function($scope, $http) {
 
     loadFlights($scope, $http);
     adminMode = 1;
-    
+
     $scope.deleteFlight = function(flight, date) {
         var sendData = {};
         sendData.flight = flight;
         sendData.date = date;
-         $http.delete('/flights?flight=' + flight + "&date=" + date)
-         .success(function(data) {
-            //$scope.text = "Delete student with id = " + d + " successful";
-               if (data['status'] == 0)
-                {
+        $http.delete('/flights?flight=' + flight + "&date=" + date)
+            .success(function(data) {
+                //$scope.text = "Delete student with id = " + d + " successful";
+                if (data['status'] == 0) {
                     loadFlights($scope, $http);
-                     alert('Xóa thành công');
-                }
-            else alert("Có lỗi xảy ra trong khi xóa chuyến bay này. Có thể do chuyến bay đã có hành khách đặt vé. Để đảm bảo quyền lợi cho hành khách, vui lòng hủy các vé đã đặt trước khi xóa chuyến bay này.");
-            //loadFlights($scope, $http);
-         })
-         .error(function(data, status) {
-            //$scope.text = "Error: " + data;
-            var test = "test";
-         });
-     }
+                    alert('Xóa thành công');
+                } else alert("Có lỗi xảy ra trong khi xóa chuyến bay này. Có thể do chuyến bay đã có hành khách đặt vé. Để đảm bảo quyền lợi cho hành khách, vui lòng hủy các vé đã đặt trước khi xóa chuyến bay này.");
+                //loadFlights($scope, $http);
+            })
+            .error(function(data, status) {
+                //$scope.text = "Error: " + data;
+                var test = "test";
+            });
+    }
 
-     $scope.fillUpdate= function(id)
-     {
-        
+    $scope.fillUpdate = function(id) {
+
         loadFlightInfo($scope, $http);
         $scope.title = "Chỉnh sửa";
         update = 1;
@@ -782,89 +761,79 @@ app.controller('FlightScheduleCtrl',['$scope', '$http', function($scope, $http){
         document.getElementById("flightTime").value = $scope.listFlights[id].ThoiGianBay;
         $scope.sid = $scope.listFlights[id].Ma;
         $scope.sdate = $scope.listFlights[id].Ngay;
-     }
+    }
 
-     $scope.updateFlight = function(id, date)
-     {
-            var temp = {};
-            temp.MaCB = id;
-            temp.NgayCu = date;
-            temp.MaCBMoi = $('#flightCode').text();
-            temp.Ngay = document.getElementById("date").value;
-            temp.Gio = document.getElementById("time").value;
-            temp.ThoiGianBay = document.getElementById("flightTime").value;
-            
-            $http.put('/flights', temp)
-            .success(function(data)
-            {
+    $scope.updateFlight = function(id, date) {
+        var temp = {};
+        temp.MaCB = id;
+        temp.NgayCu = date;
+        temp.MaCBMoi = $('#flightCode').text();
+        temp.Ngay = document.getElementById("date").value;
+        temp.Gio = document.getElementById("time").value;
+        temp.ThoiGianBay = document.getElementById("flightTime").value;
+
+        $http.put('/flights', temp)
+            .success(function(data) {
                 //$scope.text = "Update successful";
                 //loadFlights($scope, $http);
-                if (data['status'] == 0)
-                {
-                     alert('Cập nhật thành công');
+                if (data['status'] == 0) {
+                    alert('Cập nhật thành công');
                     loadFlights($scope, $http);
                     $http.put('/tickets/fkey', temp)
-                    .success(function(data)
-                    {
-                        var test = "";
-                    })
-                    .error(function(data, status) {
-                        //$scope.text = "Error: " + data;
-                        var test = "";
-                    });
+                        .success(function(data) {
+                            var test = "";
+                        })
+                        .error(function(data, status) {
+                            //$scope.text = "Error: " + data;
+                            var test = "";
+                        });
                 } else alert("Có lỗi xảy ra khi cập nhật chuyến bay. Xin đảm bảo rằng trong cùng một ngày không thể có 2 chuyến bay có cùng mã chuyến bay với nhau.");
             })
             .error(function(data, status) {
                 //$scope.text = "Error: " + data;
             });
-     }
+    }
 
-     $scope.fillInsert = function()
-     {
+    $scope.fillInsert = function() {
         update = 0;
         loadFlightInfo($scope, $http);
         $scope.title = "Thêm chuyến bay";
-        
-            $('#flightCode').text("Chọn mã chuyến bay");
-            document.getElementById("date").value = "";
-            document.getElementById("time").value = "";
-            document.getElementById("flightTime").value = "";
-        
-     }
 
-     $scope.insertFlight = function()
-     {
-        if ($('#flightCode').text() != 'Chọn mã chuyến bay')
-        {
+        $('#flightCode').text("Chọn mã chuyến bay");
+        document.getElementById("date").value = "";
+        document.getElementById("time").value = "";
+        document.getElementById("flightTime").value = "";
+
+    }
+
+    $scope.insertFlight = function() {
+        if ($('#flightCode').text() != 'Chọn mã chuyến bay' && $('#date').val() != '') {
             var temp = {};
             temp.Ma = $('#flightCode').text();
             temp.Ngay = document.getElementById("date").value;
             temp.Gio = document.getElementById("time").value;
             temp.ThoiGianBay = document.getElementById("flightTime").value;
             $http.post('/flights', temp)
-            .success(function(data)
-            {
-                //$scope.text = "Insert successful";
-                 if (data['status'] == 0)
-                {
-                loadFlights($scope, $http);
-                 alert('Thêm thành công');
-            }else alert('Có lỗi xảy ra khi thêm chuyến bay. Xin đảm bảo rằng trong cùng một ngày không thể có 2 chuyến bay có cùng mã chuyến bay với nhau.');
-            })
-            .error(function(data, status) {
-                //$scope.text = "Error: " + data;
-                
-            });
-        }
-        else
-        {
-            //$scope.text = "ID can not be null";
-           
-        } 
-     }
+                .success(function(data) {
+                    //$scope.text = "Insert successful";
+                    if (data['status'] == 0) {
+                        $('#myModal').modal('hide');
+                        loadFlights($scope, $http);
+                        alert('Thêm thành công');
+                    } else alert('Có lỗi xảy ra khi thêm chuyến bay. Xin đảm bảo rằng trong cùng một ngày không thể có 2 chuyến bay có cùng mã chuyến bay với nhau.');
+                })
+                .error(function(data, status) {
+                    //$scope.text = "Error: " + data;
 
-     $scope.fillUpdateTicket = function(id)
-     {
+                });
+        } else {
+            //$scope.text = "ID can not be null";
+            alert("Vui lòng nhập đủ thông tin về ngày bay và mã chuyến bay");
+
+        }
+    }
+
+    $scope.fillUpdateTicket = function(id) {
         update = 1;
         $scope.title1 = "Chỉnh sửa vé";
         document.getElementById("priceLevel").value = $scope.Tickets[id].MucGia;
@@ -873,119 +842,104 @@ app.controller('FlightScheduleCtrl',['$scope', '$http', function($scope, $http){
         $scope.sid = $scope.Tickets[id].MaThongTin;
         $scope.ticketType = $scope.Tickets[id].LoaiVe;
         $scope.pLevel = document.getElementById("priceLevel").value;
-     }
+    }
 
-       $scope.fillInsertTicket = function()
-       {
-            update = 0;
-            $scope.title1 = "Thêm vé";
-            document.getElementById("type").value = "";
-            document.getElementById("priceLevel").value = "";
-            document.getElementById("number").value = "";
-            document.getElementById("price").value = "";
-       }
+    $scope.fillInsertTicket = function() {
+        update = 0;
+        $scope.title1 = "Thêm vé";
+        document.getElementById("type").value = "";
+        document.getElementById("priceLevel").value = "";
+        document.getElementById("number").value = "";
+        document.getElementById("price").value = "";
+    }
 
-       $scope.updateTicket = function(id, type, pLevel, flight, date)
-       {
-            var temp = {};
-            temp.Ma = id;
-            temp.LoaiVeCu = type;
-            temp.MucGiaCu = pLevel;
-            temp.MucGia = document.getElementById("priceLevel").value;
-            temp.SoLuong = document.getElementById("number").value;
-            temp.GiaBan = document.getElementById("price").value;
-            $http.put('/tickets', temp)
-            .success(function(data)
-            {
+    $scope.updateTicket = function(id, type, pLevel, flight, date) {
+        var temp = {};
+        temp.Ma = id;
+        temp.LoaiVeCu = type;
+        temp.MucGiaCu = pLevel;
+        temp.MucGia = document.getElementById("priceLevel").value;
+        temp.SoLuong = document.getElementById("number").value;
+        temp.GiaBan = document.getElementById("price").value;
+        $http.put('/tickets', temp)
+            .success(function(data) {
                 //$scope.text = "Update successful";
-                if (data['status'] == 0)
-                {
-                $('#myModal2').modal('hide');
-                loadTickets($scope, $http, flight, date);
-                 alert('Cập nhật thành công');
-            }else alert("Có lỗi xảy ra khi cập nhật vé. Xin đảm bảo rằng không có hai vé nào cùng hạng và cùng mức giá.");
+                if (data['status'] == 0) {
+                    $('#myModal2').modal('hide');
+                    loadTickets($scope, $http, flight, date);
+                    alert('Cập nhật thành công');
+                } else alert("Có lỗi xảy ra khi cập nhật vé. Xin đảm bảo rằng không có hai vé nào cùng hạng và cùng mức giá.");
             })
             .error(function(data, status) {
                 //$scope.text = "Error: " + data;
             });
-       }
+    }
 
-       $scope.insertTicket = function(flight, date)
-       {
-            if ((document.getElementById("type").value == 'Y' || document.getElementById("type").value == 'C') && document.getElementById("priceLevel").value != "")
-            {
-                var temp = {};
-                temp.MaCB = flight;
-                temp.Ngay = date;
-                temp.Ma = flight + date;
-                temp.LoaiVe = document.getElementById("type").value;
-                temp.MaThongTin = temp.Ma + temp.LoaiVe;
-                temp.MucGia = document.getElementById("priceLevel").value;
-                temp.SoLuong = document.getElementById("number").value;
-                temp.GiaBan = document.getElementById("price").value;
-                $http.post('/tickets', temp)
-                .success(function(data)
-                {
-                    if (data['status'] == 0)
-                    {
-                     $('#myModal2').modal('hide');
-                      loadTickets($scope, $http, flight, date);
-                       alert('Thêm thành công');
-                    }else alert("Có lỗi xảy ra khi thêm vé mới. Xin đảm bảo rằng không có hai vé nào cùng hạng và cùng mức giá.");
-                   
+    $scope.insertTicket = function(flight, date) {
+        if ((document.getElementById("type").value == 'Y' || document.getElementById("type").value == 'C') && document.getElementById("priceLevel").value != "") {
+            var temp = {};
+            temp.MaCB = flight;
+            temp.Ngay = date;
+            temp.Ma = flight + date;
+            temp.LoaiVe = document.getElementById("type").value;
+            temp.MaThongTin = temp.Ma + temp.LoaiVe;
+            temp.MucGia = document.getElementById("priceLevel").value;
+            temp.SoLuong = document.getElementById("number").value;
+            temp.GiaBan = document.getElementById("price").value;
+            $http.post('/tickets', temp)
+                .success(function(data) {
+                    if (data['status'] == 0) {
+                        $('#myModal2').modal('hide');
+                        loadTickets($scope, $http, flight, date);
+                        alert('Thêm thành công');
+                    } else alert("Có lỗi xảy ra khi thêm vé mới. Xin đảm bảo rằng không có hai vé nào cùng hạng và cùng mức giá.");
+
                 })
                 .error(function(data, status) {
 
                 });
-            }
-            else
-            {
-                //$scope.text = "ID can not be null";
-               
-            } 
-       }
-
-     $(function(){
-      $('#id').keypress(function(e){
-        if((e.which >= 65 && e.which <= 90) || (e.which >= 97 && e.which <= 122) || (e.which >= 48 && e.which <= 57)) {
         } else {
-          return false;
+            //$scope.text = "ID can not be null";
+            alert("Lỗi xảy ra. Vui lòng đảm bảo rằng loại vé chỉ là Y hoặc C");
         }
-      });
+    }
+
+    $(function() {
+        $('#id').keypress(function(e) {
+            if ((e.which >= 65 && e.which <= 90) || (e.which >= 97 && e.which <= 122) || (e.which >= 48 && e.which <= 57)) {} else {
+                return false;
+            }
+        });
     });
 
-     $scope.chooseFlight = function(s)
-     {
+    $scope.chooseFlight = function(s) {
         $('#flightCode').text(s);
-     }
+    }
 
-     $scope.loadTicketTypeInfo = function(flight, date)
-     {
+    $scope.loadTicketTypeInfo = function(flight, date) {
         $scope.f = flight;
         $scope.d = date;
         $scope.Tickets = [];
-        $http.get('/tickets?flight='+ flight + '&date=' + date)
-        .success(function(data) {
-        for (var i = 0; i < data.length; i++) 
-        {
-            var item = {};
-            item.MaThongTin = data[i].MaThongTin;
-            item.MaLoaiVe = data[i].MaLoaiVe;
-            item.LoaiVe = data[i].Hang;
-            item.MucGia = data[i].MucGia;
-            item.SoLuong = data[i].SoLuong;
-            item.GiaBan = data[i].GiaBan;
-            item.MaCB = flight;
-            item.Ngay = date;
-            $scope.Tickets.push(item);
-        }
-     })
-     .error(function(data, status) {
-            scope.text = "Error: " + data;
-        });
-     }
-     $scope.deleteTicket = function(typeCode, type, priceLevel, flight, date)
-     {
+        $http.get('/tickets?flight=' + flight + '&date=' + date)
+            .success(function(data) {
+                for (var i = 0; i < data.length; i++) {
+                    var item = {};
+                    item.MaThongTin = data[i].MaThongTin;
+                    item.MaLoaiVe = data[i].MaLoaiVe;
+                    item.LoaiVe = data[i].Hang;
+                    item.MucGia = data[i].MucGia;
+                    item.SoLuong = data[i].SoLuong;
+                    item.GiaBan = data[i].GiaBan;
+                    item.MaCB = flight;
+                    item.Ngay = date;
+                    $scope.Tickets.push(item);
+                }
+            })
+            .error(function(data, status) {
+                scope.text = "Error: " + data;
+            });
+    }
+    $scope.deleteTicket = function(typeCode, type, priceLevel, flight, date) {
         var temp = [];
         temp.MaLoaiVe = typeCode;
         temp.Hang = type;
@@ -993,9 +947,9 @@ app.controller('FlightScheduleCtrl',['$scope', '$http', function($scope, $http){
         temp.MaCB = flight;
         temp.Ngay = date;
         $http.delete('/tickets?MaLoaiVe=' + typeCode + '&Hang=' + type + '&MucGia=' + priceLevel + '&MaCB=' + flight + '&Ngay=' + date)
-        .success(function(data) {
-            if (data['status'] == 0)
-        loadTickets($scope, $http, flight, date);
-        });
-     }
+            .success(function(data) {
+                if (data['status'] == 0)
+                    loadTickets($scope, $http, flight, date);
+            });
+    }
 }]);

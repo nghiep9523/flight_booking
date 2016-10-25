@@ -5,7 +5,7 @@ var passengers = require('../models/passengers');
 router.get('/:flight/:date', function(req, res) {
   passengers.getPassengersFromFlight(req.params.flight, req.params.date, res);
 });
-router.post('/', function(req, res) {
+router.put('/', function(req, res) {
   passengers.addPassengers(req.body, res);
 });
 router.get('/', function(req, res) {
