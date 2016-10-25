@@ -177,7 +177,10 @@ app.controller('MainCtrl', ['$scope', '$http', function($scope, $http) {
                 length1 = data.length;
                 if (length1 == 0) {
                     alert("Không còn vé cho chiều đi");
-
+                    if (!isKhuHoi) {
+                        alert("Không còn vé cho chiều đi");
+                        window.location.href = "/";
+                    }
                 }
                 for (var i = 0; i < data.length; i++) {
                     var item = {};
@@ -208,13 +211,16 @@ app.controller('MainCtrl', ['$scope', '$http', function($scope, $http) {
             var result2 = str2.split("-");
             ngaybay2 = result2[2] + "-" + result2[1] + "-" + result2[0];
 
-            $http.get('/flights/search/?from=' + sanbayden + '&to=' + sanbaydi + '&date=' + ngaybay2)
+            $http.get('/flights/search/?from=' + sanbayden + '&to=' + sanbaydi + '&date=' + ngaybay2 + '&amount=' + sohanhkhach)
                 .success(function(data) {
                     document.getElementById("onl_booking").style.display = "none";
                     console.log();
                     length2 = data.length;
                     if (length2 == 0) {
                         alert("Không còn vé cho chiều về");
+                        if (length1 == 0) {
+                            window.location.href = "/";
+                        }
                     }
 
                     for (var i = 0; i < data.length; i++) {
@@ -274,6 +280,7 @@ app.controller('FlightCtrl', ['$scope', '$http', function($scope, $http) {
         oldchoose = iForm;
         chooseFlight.push(flight);
         isChoose = false;
+        document.getElementById("btn_dat_ve").disabled = false;
     }
 
     $scope.booking = function() {
